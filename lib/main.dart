@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quizbrain.dart';
 
 QuizBrain quizBrain = QuizBrain();
@@ -32,14 +33,39 @@ class _QuizPageState extends State<QuizPage> {
 
 void checkAns( bool userPickedAns){
   bool correctAns=  quizBrain.getQuestionAnswer();
-  if (userPickedAns == correctAns){
-    scoreKeeper.add(Icon(Icons.check,
-        color:Colors.green));
 
-  }else{
-    scoreKeeper.add(Icon(Icons.clear,
-        color:Colors.red));
-  }
+  setState(() {
+    if (quizBrain.isFinished()== true) {
+      Alert(
+        context: context,
+        type: AlertType.info,
+        title: "Quiz Complete",
+        desc: "Seems You're Done With This Quiz. Restart To Play Again.",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Restart",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+      quizBrain.restart();
+      scoreKeeper = [];
+    } else {
+      if (userPickedAns == correctAns) {
+        scoreKeeper.add(Icon(Icons.check,
+            color: Colors.green));
+      } else {
+        scoreKeeper.add(Icon(Icons.clear,
+            color: Colors.red));
+      }
+
+      quizBrain.nextQuestion();
+    }
+  });
 }
   @override
   Widget build(BuildContext context) {
@@ -79,9 +105,7 @@ void checkAns( bool userPickedAns){
                     ),
                   ),
                   onPressed: () {
-                    setState(() {
-                      quizBrain.nextQuestion();
-                    });
+
                     checkAns(true);
 
 
@@ -105,10 +129,7 @@ void checkAns( bool userPickedAns){
               ),
               onPressed: () {
                checkAns(false);
-                setState(() {
 
-                  quizBrain.nextQuestion();
-                });
                 //The user picked false.
               },
             ),
@@ -119,7 +140,6 @@ void checkAns( bool userPickedAns){
         Row(
            children: scoreKeeper
         )
-        //TODO: Add a Row here as your score keeper
       ],
     );
   }
