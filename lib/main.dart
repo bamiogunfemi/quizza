@@ -28,45 +28,46 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List <Icon> scoreKeeper=[];
+  List<Icon> scoreKeeper = [];
 
+  void checkAns(bool userPickedAns) {
+    bool correctAns = quizBrain.getQuestionAnswer();
 
-void checkAns( bool userPickedAns){
-  bool correctAns=  quizBrain.getQuestionAnswer();
-
-  setState(() {
-    if (quizBrain.isFinished()== true) {
-      Alert(
-        context: context,
-        type: AlertType.info,
-        title: "Quiz Complete",
-        desc: "Seems You're Done With This Quiz. Restart To Play Again.",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "Restart",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 120,
-          )
-        ],
-      ).show();
-      quizBrain.restart();
-      scoreKeeper = [];
-    } else {
-      if (userPickedAns == correctAns) {
-        scoreKeeper.add(Icon(Icons.check,
-            color: Colors.green));
+    setState(() {
+      if (quizBrain.isFinished() == true) {
+        Alert(
+          context: context,
+          type: AlertType.info,
+          title: "Quiz Complete",
+          desc: "Seems You're Done With This Quiz. Restart To Play Again.",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Restart",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'SourceSansPro'),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+        quizBrain.restart();
+        scoreKeeper = [];
       } else {
-        scoreKeeper.add(Icon(Icons.clear,
-            color: Colors.red));
-      }
+        if (userPickedAns == correctAns) {
+          scoreKeeper.add(Icon(Icons.check, color: Colors.green));
+        } else {
+          scoreKeeper.add(Icon(Icons.clear, color: Colors.red));
+        }
 
-      quizBrain.nextQuestion();
-    }
-  });
-}
+        quizBrain.nextQuestion();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -82,9 +83,9 @@ void checkAns( bool userPickedAns){
                 quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.white,
-                ),
+                    fontSize: 28.0,
+                    color: Colors.white,
+                    fontFamily: 'SourceSansPro'),
               ),
             ),
           ),
@@ -93,53 +94,48 @@ void checkAns( bool userPickedAns){
           children: <Widget>[
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(15.0),
+                padding: EdgeInsets.all(20.0),
                 child: FlatButton(
                   textColor: Colors.white,
                   color: Colors.green,
                   child: Text(
                     'True',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                    ),
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontFamily: 'SourceSansPro'),
                   ),
                   onPressed: () {
-
                     checkAns(true);
-
 
                     //The user picked true.
                   },
                 ),
               ),
             ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: FlatButton(
+                  color: Colors.red,
+                  child: Text(
+                    'False',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    checkAns(false);
 
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
+                    //The user picked false.
+                  },
                 ),
               ),
-              onPressed: () {
-               checkAns(false);
-
-                //The user picked false.
-              },
             ),
-          ),
-        ),
           ],
         ),
-        Row(
-           children: scoreKeeper
-        )
+        Row(children: scoreKeeper)
       ],
     );
   }
