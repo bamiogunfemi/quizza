@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'question.dart';
+import 'quizbrain.dart';
+
+QuizBrain quizBrain = QuizBrain();
 void main() => runApp(Quizzler());
 
 class Quizzler extends StatelessWidget {
@@ -7,7 +9,7 @@ class Quizzler extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.black,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -26,11 +28,7 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List <Icon> scoreKeeper=[];
-  List <Question>  questions =[
-  Question(q: 'You can lead a cow down stairs but not up stairs.', a:false),
-  Question(q:'Approximately one quarter of human bones are in the feet.', a:true),
-  Question(q:'A slug\'s blood is green.', a:true)
-   ];
+
 
   int questionNumber = 0;
 
@@ -46,7 +44,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[questionNumber].questionText,
+                quizBrain.questions[questionNumber].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -56,36 +54,39 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
         ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.green,
-              child: Text(
-                'True',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: FlatButton(
+                  textColor: Colors.white,
+                  color: Colors.green,
+                  child: Text(
+                    'True',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      questionNumber++;
+                      bool correctAns = quizBrain.questions[questionNumber].questionAns;
+                      if (correctAns == true){
+                      }else{
+
+                      }
+                      scoreKeeper.add(Icon(Icons.check,
+                          color:Colors.green));
+                    });
+
+                    //The user picked true.
+                  },
                 ),
               ),
-              onPressed: () {
-                setState(() {
-                  questionNumber++;
-                  bool correctAns = questions[questionNumber].questionAns;
-                  if (correctAns == true){
-                  }else{
-
-                  }
-                  scoreKeeper.add(Icon(Icons.check,
-                      color:Colors.green));
-                });
-
-                //The user picked true.
-              },
             ),
-          ),
-        ),
+
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
@@ -101,7 +102,7 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 scoreKeeper.add(Icon(Icons.clear,
                     color:Colors.red));
-                bool correctAns = questions[questionNumber].questionAns;
+                bool correctAns = quizBrain.questions[questionNumber].questionAns;
                if(correctAns == false){
 
                }else{
@@ -115,6 +116,8 @@ class _QuizPageState extends State<QuizPage> {
               },
             ),
           ),
+        ),
+          ],
         ),
         Row(
            children: scoreKeeper
