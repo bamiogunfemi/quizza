@@ -30,7 +30,6 @@ class _QuizPageState extends State<QuizPage> {
   List <Icon> scoreKeeper=[];
 
 
-  int questionNumber = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.getQuestionText(questionNumber),
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -71,9 +70,9 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   onPressed: () {
                     setState(() {
-                      questionNumber++;
+                      quizBrain.nextQuestion();
                     });
-                  bool correctAns=  quizBrain.getQuestionAnswer(questionNumber);
+                  bool correctAns=  quizBrain.getQuestionAnswer();
                       if (correctAns == true){
                       }else{
 
@@ -103,7 +102,7 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 scoreKeeper.add(Icon(Icons.clear,
                     color:Colors.red));
-                bool correctAns = quizBrain.getQuestionAnswer(questionNumber);
+                bool correctAns = quizBrain.getQuestionAnswer();
                if(correctAns == false){
 
                }else{
@@ -111,7 +110,7 @@ class _QuizPageState extends State<QuizPage> {
                }
                 setState(() {
 
-                  questionNumber++;
+                  quizBrain.nextQuestion();
                 });
                 //The user picked false.
               },
